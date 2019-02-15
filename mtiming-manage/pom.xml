@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.mtiming.parent</groupId>
+        <artifactId>mtiming-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <!--也是父类级别工程,只是是作为一些功能模块的父级，这个是要最最优先install的,但是又因为他下面有依赖其他同级模块,所以其他同级模块要先install-->
+    <groupId>com.mtiming.parent</groupId>
+    <artifactId>mtiming-manage</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>mtiming-manage-pojo</module>
+        <module>mtiming-manage-dao</module>
+        <module>mtiming-manage-service</module>
+        <module>mtiming-manage-web</module>
+    </modules>
+
+
+    <dependencies>
+
+        <!--项目公共模块，因为父类依赖此模块，所以父类下的所有子类会有传递依赖-->
+        <dependency>
+            <groupId>com.mtiming.common</groupId>
+            <artifactId>mtiming-common</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+        </plugins>
+    </build>
+</project>
