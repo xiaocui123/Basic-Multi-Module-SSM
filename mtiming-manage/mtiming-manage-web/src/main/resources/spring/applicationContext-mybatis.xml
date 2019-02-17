@@ -9,11 +9,22 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
     <!-- spring和MyBatis整合，不需要mybatis的配置映射文件 -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
+        <property name="dataSource" ref="dynamicDataSource"/>
         <!-- 自动扫描 mapper.xml文件(读取的是编译出来的classes目录下的module目录下的具体模块的mapping目录下的任意xml文件) -->
         <property name="mapperLocations" value="classpath*:mapper/*.xml"></property>
         <!--最新mybatis的配置文件位置-->
         <property name="configLocation" value="classpath:mybatis/mybatis-config.xml"></property>
+    </bean>
+
+    <bean id="dynamicDataSource" class="com.mtiming.config.ds.DynamicDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <entry value-ref="dataSource" key="DATASOURCE"></entry>
+                <entry value-ref="dataSourceTiming" key="DATASOURCETIMING"></entry>
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="dataSource">
+        </property>
     </bean>
 
     <!-- mapper 接口所在包名，Spring会自动查找其下的类 -->

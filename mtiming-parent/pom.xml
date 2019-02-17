@@ -13,7 +13,7 @@
     <description>
         一个简单SpringMVC+Spring+Mybatis整理项目
     </description>
-    <url>http://code.YouMeek.com/</url>
+    <url></url>
 
 
     <!-- 集中定义公用的依赖版本号 -->
@@ -41,6 +41,7 @@
 
         <junit.version>4.11</junit.version>
         <mysql-connector.version>5.1.21</mysql-connector.version>
+        <mssql-jdbc.version>4.0</mssql-jdbc.version>
         <druid.version>1.0.5</druid.version>
 
         <javaee-api.version>7.0</javaee-api.version>
@@ -57,6 +58,12 @@
         <httpclient.version>4.3.3</httpclient.version>
         <jackson-databind.version>2.4.2</jackson-databind.version>
         <fastjson.version>1.1.43</fastjson.version>
+        <shiro.version>1.2.3</shiro.version>
+
+        <guava.version>19.0</guava.version>
+        <poi-ooxml.version>3.15</poi-ooxml.version>
+
+        <pagehelper.version>5.0.1</pagehelper.version>
         <!--架包版本变量 end-->
 
         <!--插件版本变量 start-->
@@ -225,6 +232,19 @@
                 <scope>runtime</scope>
             </dependency>
 
+            <!-- sqlserver驱动 -->
+            <dependency>
+                <groupId>com.microsoft.sqlserver</groupId>
+                <artifactId>sqljdbc4</artifactId>
+                <version>${mssql-jdbc.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper</artifactId>
+                <version>${pagehelper.version}</version>
+            </dependency>
+
             <dependency>
                 <!--这个组件具体可以看这里介绍:http://www.oschina.net/p/druid-->
                 <groupId>com.alibaba</groupId>
@@ -316,11 +336,45 @@
             </dependency>
 
 
+            <!-- shiro身份验证与授权 -->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-core</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-web</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-ehcache</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+
             <!--apache工具包-->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi-ooxml.version}</version>
             </dependency>
 
 
