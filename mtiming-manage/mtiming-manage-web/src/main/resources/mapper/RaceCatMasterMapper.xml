@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mtiming.manage.mapper.RaceCatMasterMapper" >
+  <resultMap id="BaseResultMap" type="com.mtiming.manage.pojo.RaceCatMaster" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="RaceNo" property="raceno" jdbcType="INTEGER" />
+    <result column="RaceCat" property="racecat" jdbcType="NVARCHAR" />
+    <result column="CourseID" property="courseid" jdbcType="INTEGER" />
+    <result column="RaceCatName" property="racecatname" jdbcType="NVARCHAR" />
+    <result column="RaceCatNameChi" property="racecatnamechi" jdbcType="NVARCHAR" />
+    <result column="Gender" property="gender" jdbcType="NCHAR" />
+    <result column="IsTeam" property="isteam" jdbcType="CHAR" />
+    <result column="CoreLeg" property="coreleg" jdbcType="INTEGER" />
+    <result column="NoOfPrize" property="noofprize" jdbcType="INTEGER" />
+    <result column="Header" property="header" jdbcType="CHAR" />
+    <result column="Seperator" property="seperator" jdbcType="NVARCHAR" />
+    <result column="Laps" property="laps" jdbcType="INTEGER" />
+    <result column="RankCatBy" property="rankcatby" jdbcType="CHAR" />
+    <result column="WinPos" property="winpos" jdbcType="INTEGER" />
+    <result column="TeamSize" property="teamsize" jdbcType="INTEGER" />
+    <result column="TeamTimeMode" property="teamtimemode" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, RaceNo, RaceCat, CourseID, RaceCatName, RaceCatNameChi, Gender, IsTeam, CoreLeg, 
+    NoOfPrize, Header, Seperator, Laps, RankCatBy, WinPos, TeamSize, TeamTimeMode
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.mtiming.manage.pojo.RaceCatMasterExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from RaceCatMaster
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <insert id="insert" parameterType="com.mtiming.manage.pojo.RaceCatMaster" >
+    insert into RaceCatMaster (id, RaceNo, RaceCat, 
+      CourseID, RaceCatName, RaceCatNameChi, 
+      Gender, IsTeam, CoreLeg, 
+      NoOfPrize, Header, Seperator, 
+      Laps, RankCatBy, WinPos, 
+      TeamSize, TeamTimeMode)
+    values (#{id,jdbcType=INTEGER}, #{raceno,jdbcType=INTEGER}, #{racecat,jdbcType=NVARCHAR}, 
+      #{courseid,jdbcType=INTEGER}, #{racecatname,jdbcType=NVARCHAR}, #{racecatnamechi,jdbcType=NVARCHAR}, 
+      #{gender,jdbcType=NCHAR}, #{isteam,jdbcType=CHAR}, #{coreleg,jdbcType=INTEGER}, 
+      #{noofprize,jdbcType=INTEGER}, #{header,jdbcType=CHAR}, #{seperator,jdbcType=NVARCHAR}, 
+      #{laps,jdbcType=INTEGER}, #{rankcatby,jdbcType=CHAR}, #{winpos,jdbcType=INTEGER}, 
+      #{teamsize,jdbcType=INTEGER}, #{teamtimemode,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mtiming.manage.pojo.RaceCatMaster" >
+    insert into RaceCatMaster
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="raceno != null" >
+        RaceNo,
+      </if>
+      <if test="racecat != null" >
+        RaceCat,
+      </if>
+      <if test="courseid != null" >
+        CourseID,
+      </if>
+      <if test="racecatname != null" >
+        RaceCatName,
+      </if>
+      <if test="racecatnamechi != null" >
+        RaceCatNameChi,
+      </if>
+      <if test="gender != null" >
+        Gender,
+      </if>
+      <if test="isteam != null" >
+        IsTeam,
+      </if>
+      <if test="coreleg != null" >
+        CoreLeg,
+      </if>
+      <if test="noofprize != null" >
+        NoOfPrize,
+      </if>
+      <if test="header != null" >
+        Header,
+      </if>
+      <if test="seperator != null" >
+        Seperator,
+      </if>
+      <if test="laps != null" >
+        Laps,
+      </if>
+      <if test="rankcatby != null" >
+        RankCatBy,
+      </if>
+      <if test="winpos != null" >
+        WinPos,
+      </if>
+      <if test="teamsize != null" >
+        TeamSize,
+      </if>
+      <if test="teamtimemode != null" >
+        TeamTimeMode,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="raceno != null" >
+        #{raceno,jdbcType=INTEGER},
+      </if>
+      <if test="racecat != null" >
+        #{racecat,jdbcType=NVARCHAR},
+      </if>
+      <if test="courseid != null" >
+        #{courseid,jdbcType=INTEGER},
+      </if>
+      <if test="racecatname != null" >
+        #{racecatname,jdbcType=NVARCHAR},
+      </if>
+      <if test="racecatnamechi != null" >
+        #{racecatnamechi,jdbcType=NVARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=NCHAR},
+      </if>
+      <if test="isteam != null" >
+        #{isteam,jdbcType=CHAR},
+      </if>
+      <if test="coreleg != null" >
+        #{coreleg,jdbcType=INTEGER},
+      </if>
+      <if test="noofprize != null" >
+        #{noofprize,jdbcType=INTEGER},
+      </if>
+      <if test="header != null" >
+        #{header,jdbcType=CHAR},
+      </if>
+      <if test="seperator != null" >
+        #{seperator,jdbcType=NVARCHAR},
+      </if>
+      <if test="laps != null" >
+        #{laps,jdbcType=INTEGER},
+      </if>
+      <if test="rankcatby != null" >
+        #{rankcatby,jdbcType=CHAR},
+      </if>
+      <if test="winpos != null" >
+        #{winpos,jdbcType=INTEGER},
+      </if>
+      <if test="teamsize != null" >
+        #{teamsize,jdbcType=INTEGER},
+      </if>
+      <if test="teamtimemode != null" >
+        #{teamtimemode,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

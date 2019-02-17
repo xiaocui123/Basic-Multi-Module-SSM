@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mtiming.manage.mapper.TimingResultMapper">
+
+    <resultMap id="timingFinalResultMap" type="com.mtiming.manage.pojo.TimingFinalResultType">
+        <id column="Tag" property="tag" jdbcType="VARCHAR" />
+        <result column="NameChi" property="runnerName" jdbcType="VARCHAR" />
+        <result column="Bib" property="bib" jdbcType="VARCHAR" />
+        <result column="Gender" property="gender" jdbcType="VARCHAR" />
+        <result column="Cat" property="cat" jdbcType="VARCHAR" />
+        <result column="ScoreGun" property="gunScore" jdbcType="VARCHAR" />
+        <result column="ScoreClean" property="cleanScore" jdbcType="VARCHAR" />
+        <result column="RkGun" property="rkGun" jdbcType="INTEGER" />
+        <result column="RkCat" property="rkCat" jdbcType="INTEGER" />
+    </resultMap>
+
+    <select id="existTable" parameterType="String" resultType="Integer">
+		SELECT
+	      count(1)
+        FROM  INFORMATION_SCHEMA. TABLES  where TABLE_NAME =#{tableName}
+	</select>
+    <update id="dropTable">
+		drop table ${tableName}
+	</update>
+
+
+    <!-- 建表 -->
+    <!-- 1.ddl使用update标签 -->
+    <!-- 2.ddl使用${}取值 -->
+    <!-- 3.动态列实际上只是普通的foreach, 常见问题是使用#{}取值造成语法错误 -->
+    <update id="createTimingResult" parameterType="map">
+        create table ${tableName} (
+            <foreach collection="cloums" item="listItem" separator=",">
+                ${listItem} varchar(30)
+            </foreach>
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    </update>
+
+    <insert id="saveResult" parameterType="java.util.Map">
+        insert into ${tableName}
+        <foreach collection="params.keys" item="key" open="(" close=")" separator="," >
+            ${key}
+        </foreach>
+        values
+        <foreach collection="params.keys"  item="key" open="(" close=")" separator=",">
+            #{params[${key}]}
+        </foreach>
+    </insert>
+
+    <!-- 1.表名取值${} -->
+    <!-- 2.因为是未知列故返回结果不能再是对象, 此处使用map, 实际上返回的是list<map>, 如果表里有id等唯一值也可以 单纯返回map, key用ID -->
+    <select id="selectTimingResult"  resultType="java.util.Map">
+        select * from ${tableName}
+        <include refid="where_clause"/>
+    </select>
+
+    <select id="selectTimingFinalResult" resultMap="timingFinalResultMap">
+        select Tag,NameChi,Bib,Gender,Cat,ScoreGun,ScoreClean,RkGun,RkCat
+        FROM ${tableName}
+        <include refid="where_clause"/>
+        order by cat,ABS(RkGun)
+    </select>
+
+    <sql id="where_clause">
+        <where>
+            <if test="runnerInfo.bib != null and runnerInfo.bib != ''">
+                AND bib = #{runnerInfo.bib}
+            </if>
+            <if test="runnerInfo.namechi != null and runnerInfo.namechi != ''">
+                AND NameChi = #{runnerInfo.namechi}
+            </if>
+            <if test="runnerInfo.tag != null and runnerInfo.tag != ''">
+                AND tag = #{runnerInfo.tag}
+            </if>
+            <if test="runnerInfo.cat != null and runnerInfo.cat != '-1' and runnerInfo.cat !=''">
+                AND cat = #{runnerInfo.cat}
+            </if>
+        </where>
+    </sql>
+</mapper>

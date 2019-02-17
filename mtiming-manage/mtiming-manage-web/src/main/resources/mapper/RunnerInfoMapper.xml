@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mtiming.manage.mapper.RunnerInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.mtiming.manage.pojo.RunnerInfo" >
+    <result column="Cat" property="cat" jdbcType="NVARCHAR" />
+    <result column="Cat2" property="cat2" jdbcType="NVARCHAR" />
+    <result column="Bib" property="bib" jdbcType="NVARCHAR" />
+    <result column="NameChi" property="namechi" jdbcType="NVARCHAR" />
+    <result column="NameEng" property="nameeng" jdbcType="NVARCHAR" />
+    <result column="Tag" property="tag" jdbcType="INTEGER" />
+    <result column="Disq" property="disq" jdbcType="NVARCHAR" />
+    <result column="Gender" property="gender" jdbcType="CHAR" />
+    <result column="TeamType" property="teamtype" jdbcType="NVARCHAR" />
+    <result column="TeamCat" property="teamcat" jdbcType="NVARCHAR" />
+    <result column="Team" property="team" jdbcType="NVARCHAR" />
+    <result column="TeamNameEng" property="teamnameeng" jdbcType="NVARCHAR" />
+    <result column="TeamNameChi" property="teamnamechi" jdbcType="NVARCHAR" />
+    <result column="CoreLeg" property="coreleg" jdbcType="CHAR" />
+    <result column="Association" property="association" jdbcType="NVARCHAR" />
+    <result column="Phone" property="phone" jdbcType="NVARCHAR" />
+    <result column="LastYearTime" property="lastyeartime" jdbcType="NVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    Cat, Cat2, Bib, NameChi, NameEng, Tag, Disq, Gender, TeamType, TeamCat, Team, TeamNameEng, 
+    TeamNameChi, CoreLeg, Association, Phone, LastYearTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.mtiming.manage.pojo.RunnerInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from Runner
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <insert id="insert" parameterType="com.mtiming.manage.pojo.RunnerInfo" >
+    insert into Runner (Cat, Cat2, Bib, 
+      NameChi, NameEng, Tag, 
+      Disq, Gender, TeamType, 
+      TeamCat, Team, TeamNameEng, 
+      TeamNameChi, CoreLeg, Association, 
+      Phone, LastYearTime)
+    values (#{cat,jdbcType=NVARCHAR}, #{cat2,jdbcType=NVARCHAR}, #{bib,jdbcType=NVARCHAR}, 
+      #{namechi,jdbcType=NVARCHAR}, #{nameeng,jdbcType=NVARCHAR}, #{tag,jdbcType=INTEGER}, 
+      #{disq,jdbcType=NVARCHAR}, #{gender,jdbcType=CHAR}, #{teamtype,jdbcType=NVARCHAR}, 
+      #{teamcat,jdbcType=NVARCHAR}, #{team,jdbcType=NVARCHAR}, #{teamnameeng,jdbcType=NVARCHAR}, 
+      #{teamnamechi,jdbcType=NVARCHAR}, #{coreleg,jdbcType=CHAR}, #{association,jdbcType=NVARCHAR}, 
+      #{phone,jdbcType=NVARCHAR}, #{lastyeartime,jdbcType=NVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mtiming.manage.pojo.RunnerInfo" >
+    insert into Runner
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cat != null" >
+        Cat,
+      </if>
+      <if test="cat2 != null" >
+        Cat2,
+      </if>
+      <if test="bib != null" >
+        Bib,
+      </if>
+      <if test="namechi != null" >
+        NameChi,
+      </if>
+      <if test="nameeng != null" >
+        NameEng,
+      </if>
+      <if test="tag != null" >
+        Tag,
+      </if>
+      <if test="disq != null" >
+        Disq,
+      </if>
+      <if test="gender != null" >
+        Gender,
+      </if>
+      <if test="teamtype != null" >
+        TeamType,
+      </if>
+      <if test="teamcat != null" >
+        TeamCat,
+      </if>
+      <if test="team != null" >
+        Team,
+      </if>
+      <if test="teamnameeng != null" >
+        TeamNameEng,
+      </if>
+      <if test="teamnamechi != null" >
+        TeamNameChi,
+      </if>
+      <if test="coreleg != null" >
+        CoreLeg,
+      </if>
+      <if test="association != null" >
+        Association,
+      </if>
+      <if test="phone != null" >
+        Phone,
+      </if>
+      <if test="lastyeartime != null" >
+        LastYearTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cat != null" >
+        #{cat,jdbcType=NVARCHAR},
+      </if>
+      <if test="cat2 != null" >
+        #{cat2,jdbcType=NVARCHAR},
+      </if>
+      <if test="bib != null" >
+        #{bib,jdbcType=NVARCHAR},
+      </if>
+      <if test="namechi != null" >
+        #{namechi,jdbcType=NVARCHAR},
+      </if>
+      <if test="nameeng != null" >
+        #{nameeng,jdbcType=NVARCHAR},
+      </if>
+      <if test="tag != null" >
+        #{tag,jdbcType=INTEGER},
+      </if>
+      <if test="disq != null" >
+        #{disq,jdbcType=NVARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=CHAR},
+      </if>
+      <if test="teamtype != null" >
+        #{teamtype,jdbcType=NVARCHAR},
+      </if>
+      <if test="teamcat != null" >
+        #{teamcat,jdbcType=NVARCHAR},
+      </if>
+      <if test="team != null" >
+        #{team,jdbcType=NVARCHAR},
+      </if>
+      <if test="teamnameeng != null" >
+        #{teamnameeng,jdbcType=NVARCHAR},
+      </if>
+      <if test="teamnamechi != null" >
+        #{teamnamechi,jdbcType=NVARCHAR},
+      </if>
+      <if test="coreleg != null" >
+        #{coreleg,jdbcType=CHAR},
+      </if>
+      <if test="association != null" >
+        #{association,jdbcType=NVARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=NVARCHAR},
+      </if>
+      <if test="lastyeartime != null" >
+        #{lastyeartime,jdbcType=NVARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

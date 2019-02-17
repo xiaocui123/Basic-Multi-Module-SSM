@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mtiming.manage.mapper.PointsFLowMapper" >
+  <resultMap id="BaseResultMap" type="com.mtiming.manage.pojo.PointsFLow" >
+    <result column="CourseID" property="courseid" jdbcType="INTEGER" />
+    <result column="Points" property="points" jdbcType="VARCHAR" />
+    <result column="Device" property="device" jdbcType="VARCHAR" />
+    <result column="Seq" property="seq" jdbcType="INTEGER" />
+    <result column="PriorPoint" property="priorpoint" jdbcType="VARCHAR" />
+    <result column="Interval" property="interval" jdbcType="INTEGER" />
+    <result column="NextPoint" property="nextpoint" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    CourseID, Points, Device, Seq, PriorPoint, Interval, NextPoint
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.mtiming.manage.pojo.PointsFLowExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from Points
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <insert id="insert" parameterType="com.mtiming.manage.pojo.PointsFLow" >
+    insert into Points (CourseID, Points, Device, 
+      Seq, PriorPoint, Interval, 
+      NextPoint)
+    values (#{courseid,jdbcType=INTEGER}, #{points,jdbcType=VARCHAR}, #{device,jdbcType=VARCHAR}, 
+      #{seq,jdbcType=INTEGER}, #{priorpoint,jdbcType=VARCHAR}, #{interval,jdbcType=INTEGER}, 
+      #{nextpoint,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mtiming.manage.pojo.PointsFLow" >
+    insert into Points
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="courseid != null" >
+        CourseID,
+      </if>
+      <if test="points != null" >
+        Points,
+      </if>
+      <if test="device != null" >
+        Device,
+      </if>
+      <if test="seq != null" >
+        Seq,
+      </if>
+      <if test="priorpoint != null" >
+        PriorPoint,
+      </if>
+      <if test="interval != null" >
+        Interval,
+      </if>
+      <if test="nextpoint != null" >
+        NextPoint,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="courseid != null" >
+        #{courseid,jdbcType=INTEGER},
+      </if>
+      <if test="points != null" >
+        #{points,jdbcType=VARCHAR},
+      </if>
+      <if test="device != null" >
+        #{device,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null" >
+        #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="priorpoint != null" >
+        #{priorpoint,jdbcType=VARCHAR},
+      </if>
+      <if test="interval != null" >
+        #{interval,jdbcType=INTEGER},
+      </if>
+      <if test="nextpoint != null" >
+        #{nextpoint,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mtiming.manage.mapper.RaceGunInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.mtiming.manage.pojo.RaceGunInfo" >
+    <result column="Race" property="race" jdbcType="INTEGER" />
+    <result column="PlannedGunTime" property="plannedguntime" jdbcType="NVARCHAR" />
+    <result column="GunTime" property="guntime" jdbcType="NVARCHAR" />
+    <result column="CutOffOffset" property="cutoffoffset" jdbcType="NVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    Race, PlannedGunTime, GunTime, CutOffOffset
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.mtiming.manage.pojo.RaceGunInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from RaceGun
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <insert id="insert" parameterType="com.mtiming.manage.pojo.RaceGunInfo" >
+    insert into RaceGun (Race, PlannedGunTime, GunTime, 
+      CutOffOffset)
+    values (#{race,jdbcType=INTEGER}, #{plannedguntime,jdbcType=NVARCHAR}, #{guntime,jdbcType=NVARCHAR}, 
+      #{cutoffoffset,jdbcType=NVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mtiming.manage.pojo.RaceGunInfo" >
+    insert into RaceGun
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="race != null" >
+        Race,
+      </if>
+      <if test="plannedguntime != null" >
+        PlannedGunTime,
+      </if>
+      <if test="guntime != null" >
+        GunTime,
+      </if>
+      <if test="cutoffoffset != null" >
+        CutOffOffset,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="race != null" >
+        #{race,jdbcType=INTEGER},
+      </if>
+      <if test="plannedguntime != null" >
+        #{plannedguntime,jdbcType=NVARCHAR},
+      </if>
+      <if test="guntime != null" >
+        #{guntime,jdbcType=NVARCHAR},
+      </if>
+      <if test="cutoffoffset != null" >
+        #{cutoffoffset,jdbcType=NVARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>
