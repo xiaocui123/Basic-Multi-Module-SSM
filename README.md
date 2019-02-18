@@ -1,7 +1,6 @@
-# MTiming System
+# Mtiming system
 
 ## 说明
-计时系统
 
 - 环境：
     - JDK 7（理论上支持 JDK 6、JDK 7、JDK 8）
@@ -13,3 +12,6 @@
         - spring version：**3.2.16.RELEASE（也支持 4.1、4.2）**
         - mybatis version：**3.3.1**
         - mybatis-spring version：**1.2.4**
+
+
+
