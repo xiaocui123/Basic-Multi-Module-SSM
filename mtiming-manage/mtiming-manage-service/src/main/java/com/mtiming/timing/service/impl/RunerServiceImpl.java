@@ -1,7 +1,7 @@
 /*
  * @Copyright: 2005-2018 www.hyjf.com. All rights reserved.
  */
-package com.mtiming.timing.impl;
+package com.mtiming.timing.service.impl;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.mtiming.manage.mapper.RunnerInfoMapper;
 import com.mtiming.manage.pojo.RunnerInfo;
 import com.mtiming.manage.pojo.RunnerInfoExample;
-import com.mtiming.timing.RunnerService;
+import com.mtiming.timing.service.RunnerService;
 
 /**
  * @author cui

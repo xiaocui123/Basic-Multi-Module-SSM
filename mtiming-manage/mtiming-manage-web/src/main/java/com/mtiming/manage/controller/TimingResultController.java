@@ -36,8 +36,8 @@ import com.mtiming.manage.vo.ResultEnum;
 import com.mtiming.manage.vo.SimpleResultBean;
 import com.mtiming.manage.RaceCatCache;
 import com.mtiming.manage.TimingConstants;
-import com.mtiming.timing.CttimeService;
-import com.mtiming.timing.RunnerService;
+import com.mtiming.timing.service.CttimeService;
+import com.mtiming.timing.service.RunnerService;
 
 /**
  * @author cui

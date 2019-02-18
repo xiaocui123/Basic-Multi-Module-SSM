@@ -13,7 +13,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.mtiming.manage.pojo.RaceCatMaster;
-import com.mtiming.timing.CttimeService;
+import com.mtiming.timing.service.CttimeService;
 
 /**
  * 比赛组别缓存

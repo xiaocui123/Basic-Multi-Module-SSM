@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataSourceAop implements Ordered {
 
-    private static final String PACKAGE_REFIX = "com.mtiming.timing";
+    private static final String PACKAGE_REFIX = "com.mtiming.timing.service";
 
     @Pointcut("execution(* com.mtiming..*Service.*(..))")
     public void serviceAspect() {

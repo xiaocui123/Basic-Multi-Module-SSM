@@ -1,7 +1,7 @@
 /*
  * @Copyright: 2005-2018 www.hyjf.com. All rights reserved.
  */
-package com.mtiming.timing.impl;
+package com.mtiming.timing.service.impl;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,7 +27,7 @@ import com.mtiming.manage.pojo.*;
 import com.mtiming.manage.TimingConstants;
 import com.mtiming.excel.DataSet2ExcelSXSSFHelper;
 import com.mtiming.excel.IValueFormatter;
-import com.mtiming.timing.CttimeService;
+import com.mtiming.timing.service.CttimeService;
 
 /**
  * @author cui
