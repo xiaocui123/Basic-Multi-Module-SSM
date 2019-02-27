@@ -35,6 +35,9 @@ public interface TimingConstants {
     //类别枪声排名
     String RANK_GUN="RkGun";
 
+    //Tag
+    String TAG="Tag";
+
     //计时结果表最少字段KEY
-    String[] DEFAULT_RESULT_TABLE_COLUMNS = {"Cat","Bib","NameChi","NameEng","Tag","Gender","Phone",SCORE_GUN,SCORE_CLEAN, RANK_CAT, RANK_GUN};
+    String[] DEFAULT_RESULT_TABLE_COLUMNS = {TAG,SCORE_GUN,SCORE_CLEAN, RANK_CAT, RANK_GUN};
 }

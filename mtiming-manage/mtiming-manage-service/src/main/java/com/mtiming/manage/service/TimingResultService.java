@@ -39,7 +39,7 @@ public interface TimingResultService {
      * @param tableName
      * @param params
      */
-    void saveResult(String tableName, Map<String, String> params);
+    void saveResult(String tableName, List<Map<String, String>> params);
 
     Page<TimingFinalResultType> queryForAll(RunnerInfo qo, int offset, int limit);
 

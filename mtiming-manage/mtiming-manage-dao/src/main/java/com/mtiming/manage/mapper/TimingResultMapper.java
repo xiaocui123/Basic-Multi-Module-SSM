@@ -17,11 +17,9 @@ public interface TimingResultMapper {
 
     void createTimingResult(@Param("tableName") String tableName, @Param("cloums") List<String> cloums);
 
-
-    void saveResult(@Param("tableName") String tableName, @Param("params") Map<String, String> params);
-
     List<Map<String, Object>> selectTimingResult(@Param("tableName") String tableName, @Param("runnerInfo") RunnerInfo runnerInfo);
 
     List<TimingFinalResultType> selectTimingFinalResult(@Param("tableName") String tableName, @Param("runnerInfo") RunnerInfo runnerInfo);
 
+    void saveResult(@Param("tableName")String defaultResultTableName, @Param("columns")List<String> lstColumn, @Param("params")List<Map<String,String>> params);
 }

@@ -5,14 +5,13 @@ package com.mtiming.manage.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.google.common.base.Stopwatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,17 +79,19 @@ public class TimingResultController {
         }
         //创建结果表
         List<String> arrayColumn = cttimeService.getColumns();
+        Stopwatch stopwatch=Stopwatch.createStarted();
         timingResultService.createTimingResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME, arrayColumn);
+        logger.info("创建结果表耗时【{}】",stopwatch.elapsed(TimeUnit.MILLISECONDS));
 
         //分比赛类型计算排名
         Map<Integer, List<String>> courseCatMap = cttimeService.getCourseCats();
         for (Map.Entry<Integer, List<String>> entry : courseCatMap.entrySet()) {
+            Stopwatch catWatch=Stopwatch.createStarted();
             Integer courseID = entry.getKey();
 
             List<String> lstCat = entry.getValue();
 
             List<PointsFLow> lstPointFlow = cttimeService.getPointFlow(courseID);
-
             for (String cat : lstCat) {
                 RunnerInfoExample example = new RunnerInfoExample();
                 example.or().andCatEqualTo(cat);
@@ -98,38 +99,37 @@ public class TimingResultController {
 
                 List<Map<String, Object>> lstRunnerResult = Lists.newArrayList();
                 for (RunnerInfo runnerInfo : lstRunner) {
+                    Stopwatch runnerWatch=Stopwatch.createStarted();
                     Map<String, Object> objectMap = cttimeService.calcResult(runnerInfo, lstPointFlow, courseID);
-                    objectMap.put("Cat", runnerInfo.getCat());
-                    objectMap.put("Bib", runnerInfo.getBib());
-//                    objectMap.put("NameChi", runnerInfo.getNamechi());
-//                    objectMap.put("NameEng", runnerInfo.getNameeng());
-                    objectMap.put("Gender", runnerInfo.getGender());
-                    objectMap.put("Phone", runnerInfo.getPhone());
-
+                    logger.info("计算跑者【{}】结果耗时【{}】",runnerInfo.getTag(),runnerWatch.elapsed(TimeUnit.MILLISECONDS));
                     Integer cleanScore = calcCleanScore(objectMap, lstPointFlow);
-                    if (cleanScore != null) {
-                        objectMap.put(TimingConstants.SCORE_CLEAN, cleanScore);
-                    }
+                    objectMap.put(TimingConstants.SCORE_CLEAN, cleanScore);
                     Integer gunScore = calcGunScore(objectMap, lstPointFlow, courseID);
-                    if (gunScore != null) {
-                        objectMap.put(TimingConstants.SCORE_GUN, gunScore);
-                    }
+                    objectMap.put(TimingConstants.SCORE_GUN, gunScore);
 
                     lstRunnerResult.add(objectMap);
                 }
 
                 List<Map<String, Object>> lstSortedResult = timingResultService.sortResult(lstPointFlow, lstRunnerResult);
 
+                Stopwatch saveWatch=Stopwatch.createStarted();
+                List<Map<String,String>> lstResultCopy=Lists.newArrayList();
                 for (Map<String, Object> result : lstSortedResult) {
                     Map<String, String> copyMap = Maps.transformValues(result, new Function<Object, String>() {
                         @Override
                         public String apply(Object o) {
-                            return String.valueOf(o);
+                            if(o==null){
+                                return "";
+                            }else{
+                                return String.valueOf(o);
+                            }
                         }
                     });
-                    timingResultService.saveResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME, copyMap);
+                    lstResultCopy.add(copyMap);
                 }
-                logger.info("**************Cat=【{}】计算跑者数量【{}】", cat, lstRunnerResult.size());
+                timingResultService.saveResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME, lstResultCopy);
+                logger.info("保存cat【{}】结果表耗时【{}】,记录数量【{}】",new Object[]{cat,saveWatch.elapsed(TimeUnit.MILLISECONDS),lstRunner.size()});
+                logger.info("**************Cat=【{}】计算跑者数量【{}】,耗时【{}】", new Object[]{cat, lstRunnerResult.size(),catWatch.elapsed(TimeUnit.SECONDS)});
             }
         }
 

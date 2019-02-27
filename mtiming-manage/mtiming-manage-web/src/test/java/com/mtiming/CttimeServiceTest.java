@@ -6,6 +6,10 @@ package com.mtiming;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.mtiming.manage.TimingConstants;
 import com.mtiming.manage.pojo.PointsFLow;
 import com.mtiming.manage.pojo.RunnerInfo;
 import com.mtiming.manage.pojo.RunnerInfoExample;
@@ -40,11 +44,31 @@ public class CttimeServiceTest extends AbstractSpringTest {
         List<PointsFLow> lstPointFlow=cttimeService.getPointFlow(1);
 
         RunnerInfoExample example=new RunnerInfoExample();
-        example.or().andTagEqualTo(42031);
+        example.or().andTagEqualTo(77522);
+        example.or().andTagEqualTo(77528);
         List<RunnerInfo> lstRunner = runnerService.queryRunners(example);
 
-        Map<String, Object> objectMap = cttimeService.calcResult(lstRunner.get(0),lstPointFlow,1);
-        System.out.println(objectMap);
+        Map<String, Object> objectMap1 = cttimeService.calcResult(lstRunner.get(0),lstPointFlow,1);
+        Map<String, Object> objectMap2 = cttimeService.calcResult(lstRunner.get(1),lstPointFlow,1);
+        Map<String, String> copyMap1 = Maps.transformValues(objectMap1, new Function<Object, String>() {
+            @Override
+            public String apply(Object o) {
+                return String.valueOf(o);
+            }
+        });
+        Map<String, String> copyMap2 = Maps.transformValues(objectMap2, new Function<Object, String>() {
+            @Override
+            public String apply(Object o) {
+                return String.valueOf(o);
+            }
+        });
+
+        List<Map<String,String>> lstResult= Lists.newArrayList();
+        lstResult.add(copyMap1);
+        lstResult.add(copyMap2);
+        timingResultService.saveResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME,lstResult);
+
+
     }
 
 }

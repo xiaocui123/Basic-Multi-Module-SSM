@@ -36,14 +36,16 @@
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     </update>
 
-    <insert id="saveResult" parameterType="java.util.Map">
+    <insert id="saveResult" parameterType="java.util.List">
         insert into ${tableName}
-        <foreach collection="params.keys" item="key" open="(" close=")" separator="," >
-            ${key}
+        <foreach collection="columns" item="column" open="(" close=")" separator="," >
+            ${column}
         </foreach>
         values
-        <foreach collection="params.keys"  item="key" open="(" close=")" separator=",">
-            #{params[${key}]}
+        <foreach collection="params" item="mapp" separator=",">
+            <foreach collection="mapp"  item="element" open="(" close=")" separator=",">
+                #{element}
+            </foreach>
         </foreach>
     </insert>
 

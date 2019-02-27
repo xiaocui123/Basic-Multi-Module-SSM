@@ -279,14 +279,14 @@ public class CttimeServiceImpl implements CttimeService {
 
     @Override
     public Map<String, Object> calcRunnerRealTimePassLocation(RunnerInfo runnerInfo, List<PointsFLow> pointsFLows, RaceGunInfo raceGunInfo) {
-        Map<String, Object> result = Maps.newHashMap();
+        Map<String, Object> result = Maps.newLinkedHashMap();
 
         Integer tag = runnerInfo.getTag();
 
         if (tag == null) {
             throw new IllegalArgumentException("runner 【" + runnerInfo.getNamechi() + "】没有Tag信息！");
         }
-        result.put("Tag", tag);
+        result.put(TimingConstants.TAG, tag);
 
         CttimesInfoExample example = new CttimesInfoExample();
         example.or().andTagEqualTo(String.valueOf(tag));
@@ -295,6 +295,9 @@ public class CttimeServiceImpl implements CttimeService {
         List<CttimesInfo> lstTimes = cttimesInfoMapper.selectByExample(example);
         if (lstTimes == null || lstTimes.size() <= 0) {
             logger.error("runner 【" + runnerInfo.getNameeng() + "】没有采集到数据！");
+            for(PointsFLow points:pointsFLows){
+                result.put(points.getPoints(),null);
+            }
             return result;
         }
 
@@ -304,31 +307,24 @@ public class CttimeServiceImpl implements CttimeService {
                 if (points.getSeq() == 1) {
                     //处理始发点，要选择最后一次感应到的时间
                     Integer time = getSFLocationTime(lstTimes, points, true, raceGunInfo);
-                    if (time != null) {
-                        result.put(points.getPoints(), time);
-                    }
+                    result.put(points.getPoints(), time);
                 } else if (points.getSeq() == pointsFLows.size()) {
                     //处理终点
                     Integer time = getSFLocationTime(lstTimes, points, false, raceGunInfo);
-                    if (time != null) {
-                        result.put(points.getPoints(), time);
-                    }
+                    result.put(points.getPoints(), time);
 
                 } else if (!Strings.isNullOrEmpty(points.getPriorpoint())) {
                     //这一点被通过多于一次，且不是第一次
                     Integer time = getMutiPassLocationTime(lstTimes, points, result);
-                    if (time != null) {
-                        result.put(points.getPoints(), time);
-                    }
+                    result.put(points.getPoints(), time);
                 } else {
                     //其他情况取最早感应的时间即可
                     Integer time = getCommonLocationTime(lstTimes, points);
-                    if (time != null) {
-                        result.put(points.getPoints(), time);
-                    }
+                    result.put(points.getPoints(), time);
                 }
             } catch (Exception e) {
                 logger.error("计算Location【{}】时间时出错", points.getDevice(), e);
+                result.put(points.getPoints(), null);
             }
         }
         return result;
