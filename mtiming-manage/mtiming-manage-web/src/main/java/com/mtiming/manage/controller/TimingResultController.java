@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 
 import com.google.common.base.Stopwatch;
+import com.mtiming.manage.service.MtimingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ import com.mtiming.manage.vo.SimpleResultBean;
 import com.mtiming.manage.RaceCatCache;
 import com.mtiming.manage.TimingConstants;
 import com.mtiming.timing.service.CttimeService;
-import com.mtiming.timing.service.RunnerService;
+import com.mtiming.manage.service.RunnerService;
 
 /**
  * @author cui
@@ -54,6 +55,9 @@ public class TimingResultController {
     private RunnerService runnerService;
 
     @Autowired
+    private MtimingService mtimingService;
+
+    @Autowired
     private TimingResultService timingResultService;
 
     @Autowired
@@ -67,7 +71,7 @@ public class TimingResultController {
     @RequestMapping("/getColumns")
     @ResponseBody
     public List<String> getColumns(HttpServletRequest request) {
-        return cttimeService.getColumns();
+        return mtimingService.getColumns();
     }
 
     @RequestMapping("/calcAndSaveResult")
@@ -75,24 +79,27 @@ public class TimingResultController {
     public void calcAndSaveResult(HttpServletRequest request) {
 
         if (timingResultService.existTable(TimingConstants.DEFAULT_RESULT_TABLE_NAME)) {
-            timingResultService.dropTable(TimingConstants.DEFAULT_RESULT_TABLE_NAME);
+//            timingResultService.dropTable(TimingConstants.DEFAULT_RESULT_TABLE_NAME);
         }
         //创建结果表
-        List<String> arrayColumn = cttimeService.getColumns();
+        List<String> arrayColumn = mtimingService.getColumns();
         Stopwatch stopwatch=Stopwatch.createStarted();
         timingResultService.createTimingResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME, arrayColumn);
         logger.info("创建结果表耗时【{}】",stopwatch.elapsed(TimeUnit.MILLISECONDS));
 
         //分比赛类型计算排名
-        Map<Integer, List<String>> courseCatMap = cttimeService.getCourseCats();
+        Map<Integer, List<String>> courseCatMap = mtimingService.getCourseCats();
         for (Map.Entry<Integer, List<String>> entry : courseCatMap.entrySet()) {
-            Stopwatch catWatch=Stopwatch.createStarted();
             Integer courseID = entry.getKey();
-
             List<String> lstCat = entry.getValue();
+            List<PointsFLow> lstPointFlow = mtimingService.getPointFlow(courseID);
 
-            List<PointsFLow> lstPointFlow = cttimeService.getPointFlow(courseID);
+            RaceGunInfo raceGunInfo = mtimingService.getRaceGunInfo(courseID);
+
             for (String cat : lstCat) {
+                logger.info("**************开始计算cat=【{}】成绩",cat);
+                Stopwatch catWatch=Stopwatch.createStarted();
+                long elapsedTimeSum=0;
                 RunnerInfoExample example = new RunnerInfoExample();
                 example.or().andCatEqualTo(cat);
                 List<RunnerInfo> lstRunner = runnerService.queryRunners(example);
@@ -100,13 +107,17 @@ public class TimingResultController {
                 List<Map<String, Object>> lstRunnerResult = Lists.newArrayList();
                 for (RunnerInfo runnerInfo : lstRunner) {
                     Stopwatch runnerWatch=Stopwatch.createStarted();
-                    Map<String, Object> objectMap = cttimeService.calcResult(runnerInfo, lstPointFlow, courseID);
-                    logger.info("计算跑者【{}】结果耗时【{}】",runnerInfo.getTag(),runnerWatch.elapsed(TimeUnit.MILLISECONDS));
+                    logger.info("开始计算跑者节点时间【{}】",runnerInfo.getTag());
+                    Map<String, Object> objectMap = cttimeService.calcResult(runnerInfo, lstPointFlow, raceGunInfo);
+
+                    long runnerElapsed=runnerWatch.elapsed(TimeUnit.MILLISECONDS);
+                    elapsedTimeSum+=runnerElapsed;
+                    logger.info("计算跑者【{}】结果耗时【{}】",runnerInfo.getTag(),runnerElapsed);
+
                     Integer cleanScore = calcCleanScore(objectMap, lstPointFlow);
                     objectMap.put(TimingConstants.SCORE_CLEAN, cleanScore);
-                    Integer gunScore = calcGunScore(objectMap, lstPointFlow, courseID);
+                    Integer gunScore = calcGunScore(objectMap, lstPointFlow, raceGunInfo);
                     objectMap.put(TimingConstants.SCORE_GUN, gunScore);
-
                     lstRunnerResult.add(objectMap);
                 }
 
@@ -129,7 +140,7 @@ public class TimingResultController {
                 }
                 timingResultService.saveResult(TimingConstants.DEFAULT_RESULT_TABLE_NAME, lstResultCopy);
                 logger.info("保存cat【{}】结果表耗时【{}】,记录数量【{}】",new Object[]{cat,saveWatch.elapsed(TimeUnit.MILLISECONDS),lstRunner.size()});
-                logger.info("**************Cat=【{}】计算跑者数量【{}】,耗时【{}】", new Object[]{cat, lstRunnerResult.size(),catWatch.elapsed(TimeUnit.SECONDS)});
+                logger.info("**************Cat=【{}】计算跑者数量【{}】,耗时【{}】,计算跑者总耗时【{}】", new Object[]{cat, lstRunnerResult.size(),catWatch.elapsed(TimeUnit.MILLISECONDS),elapsedTimeSum});
             }
         }
 
@@ -147,13 +158,12 @@ public class TimingResultController {
         return null;
     }
 
-    private Integer calcGunScore(Map<String, Object> objectMap, List<PointsFLow> lstPointFlow, Integer courseID) {
+    private Integer calcGunScore(Map<String, Object> objectMap, List<PointsFLow> lstPointFlow, RaceGunInfo raceGunInfo) {
         final String finishKey = lstPointFlow.get(lstPointFlow.size() - 1).getPoints();
         Integer finishTime = (Integer) objectMap.get(finishKey);
         if (finishTime != null) {
-            RaceGunInfo raceGunInfo = cttimeService.getRaceGunInfo(courseID);
             if (raceGunInfo == null) {
-                logger.error("courceId=【{}】的发枪时间未设置", courseID);
+                logger.error("courceId=【{}】的发枪时间未设置", raceGunInfo.getRace());
                 return null;
             } else {
                 return finishTime - Integer.valueOf(raceGunInfo.getGuntime());

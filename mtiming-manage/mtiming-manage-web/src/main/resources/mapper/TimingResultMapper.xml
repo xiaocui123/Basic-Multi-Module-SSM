@@ -53,12 +53,23 @@
     <!-- 2.因为是未知列故返回结果不能再是对象, 此处使用map, 实际上返回的是list<map>, 如果表里有id等唯一值也可以 单纯返回map, key用ID -->
     <select id="selectTimingResult"  resultType="java.util.Map">
         select * from ${tableName}
-        <include refid="where_clause"/>
+        <include refid="where_clause1"/>
     </select>
 
     <select id="selectTimingFinalResult" resultMap="timingFinalResultMap">
-        select Tag,NameChi,Bib,Gender,Cat,ScoreGun,ScoreClean,RkGun,RkCat
-        FROM ${tableName}
+        SELECT
+            runner.Tag,
+            runner.NameChi,
+            runner.Bib,
+            runner.Gender,
+            runner.Cat,
+            rt.ScoreGun,
+            rt.ScoreClean,
+            rt.RkGun,
+            rt.RkCat
+        FROM
+            result rt
+        LEFT JOIN runner runner ON rt.Tag = runner.Tag
         <include refid="where_clause"/>
         order by cat,ABS(RkGun)
     </select>
@@ -66,16 +77,24 @@
     <sql id="where_clause">
         <where>
             <if test="runnerInfo.bib != null and runnerInfo.bib != ''">
-                AND bib = #{runnerInfo.bib}
+                AND runner.bib = #{runnerInfo.bib}
             </if>
             <if test="runnerInfo.namechi != null and runnerInfo.namechi != ''">
-                AND NameChi = #{runnerInfo.namechi}
+                AND runner.NameChi = #{runnerInfo.namechi}
             </if>
             <if test="runnerInfo.tag != null and runnerInfo.tag != ''">
-                AND tag = #{runnerInfo.tag}
+                AND runner.tag = #{runnerInfo.tag}
             </if>
             <if test="runnerInfo.cat != null and runnerInfo.cat != '-1' and runnerInfo.cat !=''">
-                AND cat = #{runnerInfo.cat}
+                AND runner.cat = #{runnerInfo.cat}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="where_clause1">
+        <where>
+            <if test="runnerInfo.tag != null and runnerInfo.tag != ''">
+                AND tag = #{runnerInfo.tag}
             </if>
         </where>
     </sql>

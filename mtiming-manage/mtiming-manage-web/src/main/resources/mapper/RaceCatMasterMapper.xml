@@ -60,7 +60,7 @@
     </if>
     'false' as QUERYID,
     <include refid="Base_Column_List" />
-    from RaceCatMaster
+    from raceCatMaster
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -69,7 +69,7 @@
     </if>
   </select>
   <insert id="insert" parameterType="com.mtiming.manage.pojo.RaceCatMaster" >
-    insert into RaceCatMaster (id, RaceNo, RaceCat, 
+    insert into raceCatMaster (id, RaceNo, RaceCat,
       CourseID, RaceCatName, RaceCatNameChi, 
       Gender, IsTeam, CoreLeg, 
       NoOfPrize, Header, Seperator, 
@@ -83,7 +83,7 @@
       #{teamsize,jdbcType=INTEGER}, #{teamtimemode,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.mtiming.manage.pojo.RaceCatMaster" >
-    insert into RaceCatMaster
+    insert into raceCatMaster
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,

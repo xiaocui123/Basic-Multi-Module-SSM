@@ -21,7 +21,7 @@ public interface TimingConstants {
     String DEFAULT_RANK_KEY = "rank";
 
     //计时结果表默认名称
-    String DEFAULT_RESULT_TABLE_NAME = "Result";
+    String DEFAULT_RESULT_TABLE_NAME = "result";
 
     //枪声成绩
     String SCORE_GUN="ScoreGun";

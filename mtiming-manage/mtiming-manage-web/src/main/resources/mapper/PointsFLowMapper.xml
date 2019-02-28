@@ -40,7 +40,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    CourseID, Points, Device, Seq, PriorPoint, Interval, NextPoint
+    CourseID, Points, Device, Seq, PriorPoint, `Interval`, NextPoint
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.mtiming.manage.pojo.PointsFLowExample" >
     select
@@ -49,7 +49,7 @@
     </if>
     'false' as QUERYID,
     <include refid="Base_Column_List" />
-    from Points
+    from points
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -58,7 +58,7 @@
     </if>
   </select>
   <insert id="insert" parameterType="com.mtiming.manage.pojo.PointsFLow" >
-    insert into Points (CourseID, Points, Device, 
+    insert into points (CourseID, Points, Device,
       Seq, PriorPoint, Interval, 
       NextPoint)
     values (#{courseid,jdbcType=INTEGER}, #{points,jdbcType=VARCHAR}, #{device,jdbcType=VARCHAR}, 
@@ -66,7 +66,7 @@
       #{nextpoint,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.mtiming.manage.pojo.PointsFLow" >
-    insert into Points
+    insert into points
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="courseid != null" >
         CourseID,

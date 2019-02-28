@@ -46,7 +46,7 @@
     </if>
     'false' as QUERYID,
     <include refid="Base_Column_List" />
-    from RaceGun
+    from raceGun
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -55,13 +55,13 @@
     </if>
   </select>
   <insert id="insert" parameterType="com.mtiming.manage.pojo.RaceGunInfo" >
-    insert into RaceGun (Race, PlannedGunTime, GunTime, 
+    insert into raceGun (Race, PlannedGunTime, GunTime,
       CutOffOffset)
     values (#{race,jdbcType=INTEGER}, #{plannedguntime,jdbcType=NVARCHAR}, #{guntime,jdbcType=NVARCHAR}, 
       #{cutoffoffset,jdbcType=NVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.mtiming.manage.pojo.RaceGunInfo" >
-    insert into RaceGun
+    insert into raceGun
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="race != null" >
         Race,

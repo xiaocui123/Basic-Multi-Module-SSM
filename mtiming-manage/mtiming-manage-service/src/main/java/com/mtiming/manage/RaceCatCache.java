@@ -6,6 +6,7 @@ package com.mtiming.manage;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import com.mtiming.manage.service.MtimingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ import com.mtiming.timing.service.CttimeService;
 public class RaceCatCache {
 
     @Autowired
-    private CttimeService cttimeService;
+    private MtimingService cttimeService;
 
     //cat中文名称缓存
     LoadingCache<String, String> cache = CacheBuilder.newBuilder()
