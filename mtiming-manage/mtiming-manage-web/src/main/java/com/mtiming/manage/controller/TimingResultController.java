@@ -79,7 +79,7 @@ public class TimingResultController {
     public void calcAndSaveResult(HttpServletRequest request) {
 
         if (timingResultService.existTable(TimingConstants.DEFAULT_RESULT_TABLE_NAME)) {
-//            timingResultService.dropTable(TimingConstants.DEFAULT_RESULT_TABLE_NAME);
+            timingResultService.dropTable(TimingConstants.DEFAULT_RESULT_TABLE_NAME);
         }
         //创建结果表
         List<String> arrayColumn = mtimingService.getColumns();

@@ -16,8 +16,14 @@
 
     <select id="existTable" parameterType="String" resultType="Integer">
 		SELECT
-	      count(1)
-        FROM  INFORMATION_SCHEMA. TABLES  where TABLE_NAME =#{tableName}
+            count(*)
+        FROM
+            information_schema. TABLES
+        WHERE
+            (
+                TABLE_SCHEMA = 'mtiming'
+            )
+        AND (TABLE_NAME = #{tableName})
 	</select>
     <update id="dropTable">
 		drop table ${tableName}
